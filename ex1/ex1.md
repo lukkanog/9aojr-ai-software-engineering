@@ -1,5 +1,26 @@
-# Sistema de Correção Automática de Provas Simples  
-**Análise de Requisitos – Entidades e Endpoints**
+# Sistema de Correção Automática de Provas Simples
+
+## Visão Geral
+Sistema para correção automática de provas com gestão de gabaritos e análise estatística de desempenho.
+
+### Roles
+- **Professor**: Criação e gestão de provas, gabaritos e relatórios
+- **Aluno**: Realização de provas e visualização de resultados
+
+### Funcionalidades Principais
+- CRUD de prova
+- CRUD de Gabarito
+- Página para resposta dos alunos
+- Correção automática inicial pelo sistema
+- Relatório para o professor
+  - Verificação de problemas em questões
+  - Análise Estatística da Prova
+- Autenticação com roles de professor e aluno
+
+### Tecnologias Utilizadas
+- **Banco de Dados**: MongoDB
+- **Frontend**: React + TailwindCSS
+- **Backend**: Java
 
 ---
 
@@ -207,3 +228,6 @@ Indica possíveis problemas em questões (ex: alto índice de erro).
 - Estatísticas e relatórios podem ser pré-calculados ou gerados sob demanda.
 
 ---
+
+## 4. Entidades e relacionamentos
+![alt text](image.png)
