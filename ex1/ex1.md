@@ -29,7 +29,7 @@ Sistema para correção automática de provas com gestão de gabaritos e anális
 ### 1.1 Usuário (User)
 Representa qualquer usuário autenticado no sistema.
 
-**Atributos principais:**
+**Atributos principais:**   
 - id
 - nome
 - email
@@ -228,6 +228,8 @@ Indica possíveis problemas em questões (ex: alto índice de erro).
 - Estatísticas e relatórios podem ser pré-calculados ou gerados sob demanda.
 
 ---
+## 4 Fluxos principais dos usuários
+![alt text](image-1.png)
 
-## 4. Entidades e relacionamentos
+## 5. Entidades e relacionamentos
 ![alt text](image.png)
