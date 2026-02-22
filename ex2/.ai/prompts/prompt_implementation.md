@@ -87,11 +87,13 @@ Execute o trabalho **nesta ordem**, sem pular etapas:
 ### Etapa 1 — Estrutura do repositório (fullstack)
 
 * Criar estrutura padrão:
+```bash
 /
 ├── backend/
 ├── frontend/
 ├── docker-compose.yml
 └── README.md
+```
 
 * `docker-compose.yml`: subir MongoDB para dev local
 * `README.md`: instruções claras de execução (mongo + backend + frontend)
