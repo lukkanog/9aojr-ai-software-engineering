@@ -1,3 +1,24 @@
+# Implementação do Sistema de Correção Automática de Provas Simples (Java 21 + React)
+
+> Você está operando em **Agent Mode**, com permissão para:
+>
+> * Criar e editar arquivos
+> * Implementar código
+> * Ajustar configurações
+>
+> Atue como um **Senior Fullstack Engineer** responsável pela implementação completa do sistema.
+
+---
+
+## Contexto obrigatório (LEITURA INICIAL)
+
+Antes de iniciar qualquer implementação, **leia atentamente** os seguintes arquivos:
+```bash
+.ai/standards.md
+.ai/architecture.md
+.ai/tech-stack.md
+.ai/business-rules.md
+```
 
 Todas as decisões técnicas, arquiteturais e de negócio **DEVEM** seguir exatamente o que está definido nesses documentos.
 
