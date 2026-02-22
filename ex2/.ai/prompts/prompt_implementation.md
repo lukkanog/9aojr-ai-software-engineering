@@ -320,16 +320,7 @@ Implementar domínio e persistência seguindo `.ai/architecture.md`:
 
 ---
 
-### Etapa 14 — Testes mínimos obrigatórios
 
-Implementar testes unitários (JUnit 5 + Mockito) para:
-
-* regras de correção automática
-* regras de status do exam (publish/close e restrições de edição)
-* AnswerKey obrigatório + lock após primeira submission
-* tentativa única de submission (conflito 409)
-
----
 
 ## Formato de resposta (OBRIGATÓRIO)
 
