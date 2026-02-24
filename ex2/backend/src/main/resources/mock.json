@@ -1,0 +1,655 @@
+{
+  "users": [
+    {
+      "id": "65b1000000000000000000001",
+      "nome": "Ana Paula Ferreira",
+      "email": "ana.ferreira@escola.edu.br",
+      "senhaHash": "$2a$10$7EqJtq98hPqEX7fNZaFWoOq3jOXJW3OBrCQJNp0K9a5UYJHb0mxgG",
+      "role": "PROFESSOR",
+      "ativo": true,
+      "dataCriacao": "2024-01-15T08:00:00Z"
+    },
+    {
+      "id": "65b1000000000000000000002",
+      "nome": "Carlos Eduardo Mendes",
+      "email": "carlos.mendes@escola.edu.br",
+      "senhaHash": "$2a$10$7EqJtq98hPqEX7fNZaFWoOq3jOXJW3OBrCQJNp0K9a5UYJHb0mxgG",
+      "role": "PROFESSOR",
+      "ativo": true,
+      "dataCriacao": "2024-01-15T08:00:00Z"
+    },
+    {
+      "id": "65b1000000000000000000003",
+      "nome": "Mariana Costa Oliveira",
+      "email": "mariana.oliveira@escola.edu.br",
+      "senhaHash": "$2a$10$7EqJtq98hPqEX7fNZaFWoOq3jOXJW3OBrCQJNp0K9a5UYJHb0mxgG",
+      "role": "PROFESSOR",
+      "ativo": true,
+      "dataCriacao": "2024-01-15T08:00:00Z"
+    },
+    {
+      "id": "65b1000000000000000000011",
+      "nome": "João Gabriel Silva",
+      "email": "joao.silva@aluno.escola.edu.br",
+      "senhaHash": "$2a$10$7EqJtq98hPqEX7fNZaFWoOq3jOXJW3OBrCQJNp0K9a5UYJHb0mxgG",
+      "role": "ALUNO",
+      "ativo": true,
+      "dataCriacao": "2024-02-01T09:00:00Z"
+    },
+    {
+      "id": "65b1000000000000000000012",
+      "nome": "Larissa Beatriz Santos",
+      "email": "larissa.santos@aluno.escola.edu.br",
+      "senhaHash": "$2a$10$7EqJtq98hPqEX7fNZaFWoOq3jOXJW3OBrCQJNp0K9a5UYJHb0mxgG",
+      "role": "ALUNO",
+      "ativo": true,
+      "dataCriacao": "2024-02-01T09:00:00Z"
+    },
+    {
+      "id": "65b1000000000000000000013",
+      "nome": "Pedro Henrique Lima",
+      "email": "pedro.lima@aluno.escola.edu.br",
+      "senhaHash": "$2a$10$7EqJtq98hPqEX7fNZaFWoOq3jOXJW3OBrCQJNp0K9a5UYJHb0mxgG",
+      "role": "ALUNO",
+      "ativo": true,
+      "dataCriacao": "2024-02-01T09:00:00Z"
+    },
+    {
+      "id": "65b1000000000000000000014",
+      "nome": "Fernanda Rodrigues Alves",
+      "email": "fernanda.alves@aluno.escola.edu.br",
+      "senhaHash": "$2a$10$7EqJtq98hPqEX7fNZaFWoOq3jOXJW3OBrCQJNp0K9a5UYJHb0mxgG",
+      "role": "ALUNO",
+      "ativo": true,
+      "dataCriacao": "2024-02-01T09:00:00Z"
+    },
+    {
+      "id": "65b1000000000000000000015",
+      "nome": "Rafael Augusto Pereira",
+      "email": "rafael.pereira@aluno.escola.edu.br",
+      "senhaHash": "$2a$10$7EqJtq98hPqEX7fNZaFWoOq3jOXJW3OBrCQJNp0K9a5UYJHb0mxgG",
+      "role": "ALUNO",
+      "ativo": true,
+      "dataCriacao": "2024-02-01T09:00:00Z"
+    },
+    {
+      "id": "65b1000000000000000000016",
+      "nome": "Camila de Souza Nunes",
+      "email": "camila.nunes@aluno.escola.edu.br",
+      "senhaHash": "$2a$10$7EqJtq98hPqEX7fNZaFWoOq3jOXJW3OBrCQJNp0K9a5UYJHb0mxgG",
+      "role": "ALUNO",
+      "ativo": true,
+      "dataCriacao": "2024-02-01T09:00:00Z"
+    },
+    {
+      "id": "65b1000000000000000000017",
+      "nome": "Thiago Marques Barbosa",
+      "email": "thiago.barbosa@aluno.escola.edu.br",
+      "senhaHash": "$2a$10$7EqJtq98hPqEX7fNZaFWoOq3jOXJW3OBrCQJNp0K9a5UYJHb0mxgG",
+      "role": "ALUNO",
+      "ativo": true,
+      "dataCriacao": "2024-02-01T09:00:00Z"
+    },
+    {
+      "id": "65b1000000000000000000018",
+      "nome": "Isabela Cristina Carvalho",
+      "email": "isabela.carvalho@aluno.escola.edu.br",
+      "senhaHash": "$2a$10$7EqJtq98hPqEX7fNZaFWoOq3jOXJW3OBrCQJNp0K9a5UYJHb0mxgG",
+      "role": "ALUNO",
+      "ativo": true,
+      "dataCriacao": "2024-02-01T09:00:00Z"
+    },
+    {
+      "id": "65b1000000000000000000019",
+      "nome": "Lucas Vinicius Teixeira",
+      "email": "lucas.teixeira@aluno.escola.edu.br",
+      "senhaHash": "$2a$10$7EqJtq98hPqEX7fNZaFWoOq3jOXJW3OBrCQJNp0K9a5UYJHb0mxgG",
+      "role": "ALUNO",
+      "ativo": true,
+      "dataCriacao": "2024-02-01T09:00:00Z"
+    },
+    {
+      "id": "65b100000000000000000001a",
+      "nome": "Juliana Rocha Monteiro",
+      "email": "juliana.monteiro@aluno.escola.edu.br",
+      "senhaHash": "$2a$10$7EqJtq98hPqEX7fNZaFWoOq3jOXJW3OBrCQJNp0K9a5UYJHb0mxgG",
+      "role": "ALUNO",
+      "ativo": true,
+      "dataCriacao": "2024-02-01T09:00:00Z"
+    }
+  ],
+  "exams": [
+    {
+      "id": "65b1000000000000000000021",
+      "titulo": "Prova de Matemática - Funções do 2º Grau",
+      "descricao": "Avaliação sobre funções quadráticas, discriminante e análise de gráficos.",
+      "professorId": "65b1000000000000000000001",
+      "dataInicio": "2024-03-10T08:00:00Z",
+      "dataFim": "2024-03-10T10:00:00Z",
+      "status": "ENCERRADA",
+      "dataCriacao": "2024-02-20T10:00:00Z",
+      "questions": [
+        {
+          "id": "65b1000000000000000000051",
+          "enunciado": "Qual é o valor do discriminante da equação 2x² - 4x + 2 = 0?",
+          "tipo": "OBJETIVA",
+          "alternativas": [
+            "0",
+            "8",
+            "16",
+            "-8"
+          ],
+          "pontuacao": 2.5,
+          "ordem": 1
+        },
+        {
+          "id": "65b1000000000000000000052",
+          "enunciado": "A função f(x) = x² - 4x + 4 possui vértice no ponto (2, 0). Essa afirmação é verdadeira?",
+          "tipo": "VERDADEIRO_FALSO",
+          "alternativas": [
+            "Verdadeiro",
+            "Falso"
+          ],
+          "pontuacao": 2.5,
+          "ordem": 2
+        },
+        {
+          "id": "65b1000000000000000000053",
+          "enunciado": "Quais são as raízes reais de x² - 5x + 6 = 0?",
+          "tipo": "OBJETIVA",
+          "alternativas": [
+            "x = 2 e x = 3",
+            "x = -2 e x = -3",
+            "x = 1 e x = 6",
+            "x = -1 e x = -6"
+          ],
+          "pontuacao": 2.5,
+          "ordem": 3
+        },
+        {
+          "id": "65b1000000000000000000054",
+          "enunciado": "Uma função quadrática com Δ < 0 não possui raízes reais. Essa afirmação é verdadeira?",
+          "tipo": "VERDADEIRO_FALSO",
+          "alternativas": [
+            "Verdadeiro",
+            "Falso"
+          ],
+          "pontuacao": 2.5,
+          "ordem": 4
+        }
+      ]
+    },
+    {
+      "id": "65b1000000000000000000022",
+      "titulo": "Prova de História do Brasil - Era Vargas",
+      "descricao": "Avaliação sobre o período Vargas (1930-1945) e o Estado Novo.",
+      "professorId": "65b1000000000000000000002",
+      "dataInicio": "2024-03-12T09:00:00Z",
+      "dataFim": "2024-03-12T11:00:00Z",
+      "status": "ENCERRADA",
+      "dataCriacao": "2024-02-22T14:00:00Z",
+      "questions": [
+        {
+          "id": "65b1000000000000000000055",
+          "enunciado": "Em que ano Getúlio Vargas chegou ao poder pela primeira vez?",
+          "tipo": "OBJETIVA",
+          "alternativas": [
+            "1930",
+            "1932",
+            "1937",
+            "1945"
+          ],
+          "pontuacao": 2.5,
+          "ordem": 1
+        },
+        {
+          "id": "65b1000000000000000000056",
+          "enunciado": "O Estado Novo, instaurado em 1937, caracterizou-se como um regime democrático. Essa afirmação é verdadeira?",
+          "tipo": "VERDADEIRO_FALSO",
+          "alternativas": [
+            "Verdadeiro",
+            "Falso"
+          ],
+          "pontuacao": 2.5,
+          "ordem": 2
+        },
+        {
+          "id": "65b1000000000000000000057",
+          "enunciado": "Qual documento foi promulgado durante o Estado Novo de Vargas?",
+          "tipo": "OBJETIVA",
+          "alternativas": [
+            "Constituição de 1937",
+            "Constituição de 1946",
+            "Carta Magna de 1934",
+            "Declaração de 1945"
+          ],
+          "pontuacao": 2.5,
+          "ordem": 3
+        },
+        {
+          "id": "65b1000000000000000000058",
+          "enunciado": "A CLT (Consolidação das Leis do Trabalho) foi criada durante o governo Vargas. Essa afirmação é verdadeira?",
+          "tipo": "VERDADEIRO_FALSO",
+          "alternativas": [
+            "Verdadeiro",
+            "Falso"
+          ],
+          "pontuacao": 2.5,
+          "ordem": 4
+        }
+      ]
+    },
+    {
+      "id": "65b1000000000000000000023",
+      "titulo": "Prova de Biologia - Genética Mendeliana",
+      "descricao": "Avaliação sobre as Leis de Mendel, dominância e recessividade.",
+      "professorId": "65b1000000000000000000003",
+      "dataInicio": "2024-04-05T08:00:00Z",
+      "dataFim": "2024-04-05T10:00:00Z",
+      "status": "ENCERRADA",
+      "dataCriacao": "2024-03-15T11:00:00Z",
+      "questions": [
+        {
+          "id": "65b1000000000000000000061",
+          "enunciado": "O cruzamento entre dois indivíduos heterozigotos (Aa x Aa) resulta em qual proporção fenotípica?",
+          "tipo": "OBJETIVA",
+          "alternativas": [
+            "3 dominantes : 1 recessivo",
+            "1 dominante : 1 recessivo",
+            "1 dominante : 2 mistos : 1 recessivo",
+            "Todos dominantes"
+          ],
+          "pontuacao": 2.5,
+          "ordem": 1
+        },
+        {
+          "id": "65b1000000000000000000062",
+          "enunciado": "A 1ª Lei de Mendel afirma que cada indivíduo possui dois fatores para cada característica, que se separam na formação dos gametas. Essa afirmação é verdadeira?",
+          "tipo": "VERDADEIRO_FALSO",
+          "alternativas": [
+            "Verdadeiro",
+            "Falso"
+          ],
+          "pontuacao": 2.5,
+          "ordem": 2
+        },
+        {
+          "id": "65b1000000000000000000063",
+          "enunciado": "Qual é o genótipo de um indivíduo homozigoto dominante para a característica de cor de semente (amarela = A)?",
+          "tipo": "OBJETIVA",
+          "alternativas": [
+            "AA",
+            "Aa",
+            "aa",
+            "aA"
+          ],
+          "pontuacao": 2.5,
+          "ordem": 3
+        },
+        {
+          "id": "65b1000000000000000000064",
+          "enunciado": "Genes localizados em cromossomos diferentes segregam-se independentemente, segundo a 2ª Lei de Mendel. Essa afirmação é verdadeira?",
+          "tipo": "VERDADEIRO_FALSO",
+          "alternativas": [
+            "Verdadeiro",
+            "Falso"
+          ],
+          "pontuacao": 2.5,
+          "ordem": 4
+        }
+      ]
+    },
+    {
+      "id": "65b1000000000000000000024",
+      "titulo": "Prova de Português - Interpretação e Gramática",
+      "descricao": "Avaliação sobre interpretação de textos, análise sintática e figuras de linguagem.",
+      "professorId": "65b1000000000000000000001",
+      "dataInicio": "2024-05-08T14:00:00Z",
+      "dataFim": "2024-05-08T16:00:00Z",
+      "status": "PUBLICADA",
+      "dataCriacao": "2024-04-18T09:00:00Z",
+      "questions": [
+        {
+          "id": "65b1000000000000000000071",
+          "enunciado": "Em 'A vida é bela como uma flor', qual figura de linguagem é utilizada?",
+          "tipo": "OBJETIVA",
+          "alternativas": [
+            "Símile (Comparação)",
+            "Metáfora",
+            "Hipérbole",
+            "Metonímia"
+          ],
+          "pontuacao": 2.5,
+          "ordem": 1
+        },
+        {
+          "id": "65b1000000000000000000072",
+          "enunciado": "O sujeito de uma oração pode ser omitido quando sua identidade está clara pelo contexto verbal. Essa afirmação é verdadeira?",
+          "tipo": "VERDADEIRO_FALSO",
+          "alternativas": [
+            "Verdadeiro",
+            "Falso"
+          ],
+          "pontuacao": 2.5,
+          "ordem": 2
+        },
+        {
+          "id": "65b1000000000000000000073",
+          "enunciado": "Qual é o predicado na frase 'Os alunos estudaram muito para a prova'?",
+          "tipo": "OBJETIVA",
+          "alternativas": [
+            "estudaram muito para a prova",
+            "Os alunos",
+            "muito para a prova",
+            "a prova"
+          ],
+          "pontuacao": 2.5,
+          "ordem": 3
+        },
+        {
+          "id": "65b1000000000000000000074",
+          "enunciado": "A metáfora é uma figura de linguagem que estabelece uma comparação implícita entre dois elementos. Essa afirmação é verdadeira?",
+          "tipo": "VERDADEIRO_FALSO",
+          "alternativas": [
+            "Verdadeiro",
+            "Falso"
+          ],
+          "pontuacao": 2.5,
+          "ordem": 4
+        }
+      ]
+    },
+    {
+      "id": "65b1000000000000000000025",
+      "titulo": "Prova de Física - Cinemática e Dinâmica",
+      "descricao": "Avaliação sobre leis de Newton, movimento uniforme e acelerado.",
+      "professorId": "65b1000000000000000000002",
+      "dataInicio": "2024-06-15T08:00:00Z",
+      "dataFim": "2024-06-15T10:00:00Z",
+      "status": "RASCUNHO",
+      "dataCriacao": "2024-05-20T16:00:00Z",
+      "questions": [
+        {
+          "id": "65b1000000000000000000081",
+          "enunciado": "Qual das alternativas representa corretamente a 2ª Lei de Newton?",
+          "tipo": "OBJETIVA",
+          "alternativas": [
+            "F = m × a",
+            "F = m / a",
+            "F = a / m",
+            "F = m + a"
+          ],
+          "pontuacao": 2.5,
+          "ordem": 1
+        },
+        {
+          "id": "65b1000000000000000000082",
+          "enunciado": "No Movimento Uniforme (MU), a aceleração é sempre nula. Essa afirmação é verdadeira?",
+          "tipo": "VERDADEIRO_FALSO",
+          "alternativas": [
+            "Verdadeiro",
+            "Falso"
+          ],
+          "pontuacao": 2.5,
+          "ordem": 2
+        },
+        {
+          "id": "65b1000000000000000000083",
+          "enunciado": "Um corpo com massa de 10 kg está sujeito a uma força resultante de 50 N. Qual é a aceleração desse corpo?",
+          "tipo": "OBJETIVA",
+          "alternativas": [
+            "5 m/s²",
+            "0,2 m/s²",
+            "500 m/s²",
+            "10 m/s²"
+          ],
+          "pontuacao": 2.5,
+          "ordem": 3
+        },
+        {
+          "id": "65b1000000000000000000084",
+          "enunciado": "A 3ª Lei de Newton afirma que toda ação possui uma reação de mesma intensidade, mesma direção e sentido contrário. Essa afirmação é verdadeira?",
+          "tipo": "VERDADEIRO_FALSO",
+          "alternativas": [
+            "Verdadeiro",
+            "Falso"
+          ],
+          "pontuacao": 2.5,
+          "ordem": 4
+        }
+      ]
+    }
+  ],
+  "answerKeys": [
+    {
+      "id": "65b1000000000000000000031",
+      "examId": "65b1000000000000000000021",
+      "respostas": {
+        "65b1000000000000000000051": "0",
+        "65b1000000000000000000052": "Verdadeiro",
+        "65b1000000000000000000053": "x = 2 e x = 3",
+        "65b1000000000000000000054": "Verdadeiro"
+      },
+      "dataCriacao": "2024-02-20T10:30:00Z",
+      "dataAtualizacao": "2024-02-20T10:30:00Z"
+    },
+    {
+      "id": "65b1000000000000000000032",
+      "examId": "65b1000000000000000000022",
+      "respostas": {
+        "65b1000000000000000000055": "1930",
+        "65b1000000000000000000056": "Falso",
+        "65b1000000000000000000057": "Constituição de 1937",
+        "65b1000000000000000000058": "Verdadeiro"
+      },
+      "dataCriacao": "2024-02-22T14:30:00Z",
+      "dataAtualizacao": "2024-02-22T14:30:00Z"
+    },
+    {
+      "id": "65b1000000000000000000033",
+      "examId": "65b1000000000000000000023",
+      "respostas": {
+        "65b1000000000000000000061": "3 dominantes : 1 recessivo",
+        "65b1000000000000000000062": "Verdadeiro",
+        "65b1000000000000000000063": "AA",
+        "65b1000000000000000000064": "Verdadeiro"
+      },
+      "dataCriacao": "2024-03-15T11:30:00Z",
+      "dataAtualizacao": "2024-03-15T11:30:00Z"
+    },
+    {
+      "id": "65b1000000000000000000034",
+      "examId": "65b1000000000000000000024",
+      "respostas": {
+        "65b1000000000000000000071": "Símile (Comparação)",
+        "65b1000000000000000000072": "Verdadeiro",
+        "65b1000000000000000000073": "estudaram muito para a prova",
+        "65b1000000000000000000074": "Verdadeiro"
+      },
+      "dataCriacao": "2024-04-18T09:30:00Z",
+      "dataAtualizacao": "2024-04-18T09:30:00Z"
+    },
+    {
+      "id": "65b1000000000000000000035",
+      "examId": "65b1000000000000000000025",
+      "respostas": {
+        "65b1000000000000000000081": "F = m × a",
+        "65b1000000000000000000082": "Verdadeiro",
+        "65b1000000000000000000083": "5 m/s²",
+        "65b1000000000000000000084": "Verdadeiro"
+      },
+      "dataCriacao": "2024-05-20T16:30:00Z",
+      "dataAtualizacao": "2024-05-20T16:30:00Z"
+    }
+  ],
+  "submissions": [
+    {
+      "id": "65b1000000000000000000041",
+      "examId": "65b1000000000000000000021",
+      "alunoId": "65b1000000000000000000011",
+      "respostas": {
+        "65b1000000000000000000051": "0",
+        "65b1000000000000000000052": "Verdadeiro",
+        "65b1000000000000000000053": "x = 2 e x = 3",
+        "65b1000000000000000000054": "Verdadeiro"
+      },
+      "nota": 10.0,
+      "corrigida": true,
+      "dataEnvio": "2024-03-10T09:45:00Z"
+    },
+    {
+      "id": "65b1000000000000000000042",
+      "examId": "65b1000000000000000000021",
+      "alunoId": "65b1000000000000000000012",
+      "respostas": {
+        "65b1000000000000000000051": "8",
+        "65b1000000000000000000052": "Verdadeiro",
+        "65b1000000000000000000053": "x = 2 e x = 3",
+        "65b1000000000000000000054": "Verdadeiro"
+      },
+      "nota": 7.5,
+      "corrigida": true,
+      "dataEnvio": "2024-03-10T09:50:00Z"
+    },
+    {
+      "id": "65b1000000000000000000043",
+      "examId": "65b1000000000000000000021",
+      "alunoId": "65b1000000000000000000013",
+      "respostas": {
+        "65b1000000000000000000051": "0",
+        "65b1000000000000000000052": "Falso",
+        "65b1000000000000000000053": "x = 1 e x = 6",
+        "65b1000000000000000000054": "Verdadeiro"
+      },
+      "nota": 5.0,
+      "corrigida": true,
+      "dataEnvio": "2024-03-10T09:55:00Z"
+    },
+    {
+      "id": "65b1000000000000000000044",
+      "examId": "65b1000000000000000000022",
+      "alunoId": "65b1000000000000000000011",
+      "respostas": {
+        "65b1000000000000000000055": "1930",
+        "65b1000000000000000000056": "Falso",
+        "65b1000000000000000000057": "Constituição de 1937",
+        "65b1000000000000000000058": "Verdadeiro"
+      },
+      "nota": 10.0,
+      "corrigida": true,
+      "dataEnvio": "2024-03-12T10:30:00Z"
+    },
+    {
+      "id": "65b1000000000000000000045",
+      "examId": "65b1000000000000000000022",
+      "alunoId": "65b1000000000000000000014",
+      "respostas": {
+        "65b1000000000000000000055": "1932",
+        "65b1000000000000000000056": "Verdadeiro",
+        "65b1000000000000000000057": "Constituição de 1937",
+        "65b1000000000000000000058": "Verdadeiro"
+      },
+      "nota": 5.0,
+      "corrigida": true,
+      "dataEnvio": "2024-03-12T10:45:00Z"
+    },
+    {
+      "id": "65b1000000000000000000046",
+      "examId": "65b1000000000000000000022",
+      "alunoId": "65b1000000000000000000015",
+      "respostas": {
+        "65b1000000000000000000055": "1930",
+        "65b1000000000000000000056": "Falso",
+        "65b1000000000000000000057": "Constituição de 1937",
+        "65b1000000000000000000058": "Falso"
+      },
+      "nota": 7.5,
+      "corrigida": true,
+      "dataEnvio": "2024-03-12T10:55:00Z"
+    },
+    {
+      "id": "65b1000000000000000000047",
+      "examId": "65b1000000000000000000023",
+      "alunoId": "65b1000000000000000000012",
+      "respostas": {
+        "65b1000000000000000000061": "3 dominantes : 1 recessivo",
+        "65b1000000000000000000062": "Verdadeiro",
+        "65b1000000000000000000063": "AA",
+        "65b1000000000000000000064": "Verdadeiro"
+      },
+      "nota": 10.0,
+      "corrigida": true,
+      "dataEnvio": "2024-04-05T09:30:00Z"
+    },
+    {
+      "id": "65b1000000000000000000048",
+      "examId": "65b1000000000000000000023",
+      "alunoId": "65b1000000000000000000016",
+      "respostas": {
+        "65b1000000000000000000061": "1 dominante : 1 recessivo",
+        "65b1000000000000000000062": "Verdadeiro",
+        "65b1000000000000000000063": "Aa",
+        "65b1000000000000000000064": "Verdadeiro"
+      },
+      "nota": 5.0,
+      "corrigida": true,
+      "dataEnvio": "2024-04-05T09:40:00Z"
+    },
+    {
+      "id": "65b1000000000000000000049",
+      "examId": "65b1000000000000000000023",
+      "alunoId": "65b1000000000000000000017",
+      "respostas": {
+        "65b1000000000000000000061": "3 dominantes : 1 recessivo",
+        "65b1000000000000000000062": "Falso",
+        "65b1000000000000000000063": "AA",
+        "65b1000000000000000000064": "Verdadeiro"
+      },
+      "nota": 7.5,
+      "corrigida": true,
+      "dataEnvio": "2024-04-05T09:50:00Z"
+    },
+    {
+      "id": "65b100000000000000000004a",
+      "examId": "65b1000000000000000000024",
+      "alunoId": "65b1000000000000000000018",
+      "respostas": {
+        "65b1000000000000000000071": "Símile (Comparação)",
+        "65b1000000000000000000072": "Verdadeiro",
+        "65b1000000000000000000073": "estudaram muito para a prova",
+        "65b1000000000000000000074": "Verdadeiro"
+      },
+      "nota": 10.0,
+      "corrigida": true,
+      "dataEnvio": "2024-05-08T15:30:00Z"
+    },
+    {
+      "id": "65b100000000000000000004b",
+      "examId": "65b1000000000000000000024",
+      "alunoId": "65b1000000000000000000019",
+      "respostas": {
+        "65b1000000000000000000071": "Metáfora",
+        "65b1000000000000000000072": "Verdadeiro",
+        "65b1000000000000000000073": "estudaram muito para a prova",
+        "65b1000000000000000000074": "Falso"
+      },
+      "nota": 5.0,
+      "corrigida": true,
+      "dataEnvio": "2024-05-08T15:45:00Z"
+    },
+    {
+      "id": "65b100000000000000000004c",
+      "examId": "65b1000000000000000000024",
+      "alunoId": "65b100000000000000000001a",
+      "respostas": {
+        "65b1000000000000000000071": "Símile (Comparação)",
+        "65b1000000000000000000072": "Verdadeiro",
+        "65b1000000000000000000073": "Os alunos",
+        "65b1000000000000000000074": "Verdadeiro"
+      },
+      "nota": 7.5,
+      "corrigida": true,
+      "dataEnvio": "2024-05-08T15:55:00Z"
+    }
+  ]
+}
