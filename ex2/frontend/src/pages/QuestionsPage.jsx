@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import * as examsApi from '../api/exams';
+import { TIPO_QUESTAO_LABEL, label } from '../utils/labels';
 
 export default function QuestionsPage() {
     const { examId } = useParams();
@@ -35,6 +36,7 @@ export default function QuestionsPage() {
     };
 
     const handleDelete = async (qId) => {
+        if (!confirm('Deseja remover esta questão?')) return;
         try { await examsApi.deleteQuestion(qId); loadQuestions(); }
         catch (err) { setError(err.response?.data?.message || 'Erro.'); }
     };
@@ -47,20 +49,30 @@ export default function QuestionsPage() {
             </div>
             {error && <div className="mb-4 p-3 rounded-lg bg-red-500/10 text-red-400 text-sm">{error}</div>}
 
-            {/* Existing questions */}
+            {/* Questões existentes */}
             <div className="space-y-3 mb-8">
+                {questions.length === 0 && (
+                    <p className="text-slate-500 text-sm text-center py-6">Nenhuma questão adicionada ainda.</p>
+                )}
                 {questions.sort((a, b) => a.ordem - b.ordem).map(q => (
-                    <div key={q.id} className="p-4 bg-slate-800/30 rounded-lg border border-slate-700/30 flex justify-between">
-                        <div>
-                            <p className="text-white">{q.ordem}. {q.enunciado}</p>
-                            <p className="text-xs text-slate-500">{q.tipo} | {q.pontuacao} pts | Alternativas: {q.alternativas?.join(', ')}</p>
+                    <div key={q.id} className="p-4 bg-slate-800/30 rounded-lg border border-slate-700/30 flex justify-between items-start gap-4">
+                        <div className="flex-1 min-w-0">
+                            <p className="text-white font-medium">{q.ordem}. {q.enunciado}</p>
+                            <p className="text-xs text-slate-500 mt-1">
+                                {label(TIPO_QUESTAO_LABEL, q.tipo)} · {q.pontuacao} {q.pontuacao === 1 ? 'ponto' : 'pontos'}
+                            </p>
+                            {q.alternativas?.length > 0 && (
+                                <p className="text-xs text-slate-600 mt-1">
+                                    Alternativas: {q.alternativas.join(' / ')}
+                                </p>
+                            )}
                         </div>
-                        <button onClick={() => handleDelete(q.id)} className="text-red-400 text-xs hover:text-red-300">Excluir</button>
+                        <button onClick={() => handleDelete(q.id)} className="text-red-400 text-xs hover:text-red-300 flex-shrink-0">Excluir</button>
                     </div>
                 ))}
             </div>
 
-            {/* Add question form */}
+            {/* Formulário de nova questão */}
             <h2 className="text-lg font-semibold text-white mb-4">Adicionar Questão</h2>
             <form onSubmit={handleAdd} className="space-y-4 bg-slate-800/50 p-5 rounded-xl border border-slate-700/50">
                 <div>
@@ -74,7 +86,7 @@ export default function QuestionsPage() {
                         <select id="tipo" value={tipo} onChange={e => setTipo(e.target.value)}
                             className="w-full px-4 py-2 rounded-lg bg-slate-700/50 border border-slate-600 text-white outline-none">
                             <option value="OBJETIVA">Objetiva</option>
-                            <option value="VERDADEIRO_FALSO">Verdadeiro/Falso</option>
+                            <option value="VERDADEIRO_FALSO">Verdadeiro / Falso</option>
                         </select>
                     </div>
                     <div>
@@ -92,7 +104,7 @@ export default function QuestionsPage() {
                                 className="flex-1 px-4 py-2 rounded-lg bg-slate-700/50 border border-slate-600 text-white outline-none" />
                             {alternativas.length > 2 && (
                                 <button type="button" onClick={() => setAlternativas(alternativas.filter((_, j) => j !== i))}
-                                    className="text-red-400 text-sm">✕</button>
+                                    className="text-red-400 text-sm px-2" title="Remover alternativa">✕</button>
                             )}
                         </div>
                     ))}

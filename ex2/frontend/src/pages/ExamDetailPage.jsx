@@ -3,6 +3,13 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import * as examsApi from '../api/exams';
 import * as subsApi from '../api/submissions';
+import { STATUS_LABEL, TIPO_QUESTAO_LABEL, label } from '../utils/labels';
+
+const STATUS_COLORS = {
+    RASCUNHO: 'bg-yellow-500/10 text-yellow-400 border-yellow-500/20',
+    PUBLICADA: 'bg-green-500/10 text-green-400 border-green-500/20',
+    ENCERRADA: 'bg-slate-500/10 text-slate-400 border-slate-500/20',
+};
 
 export default function ExamDetailPage() {
     const { id } = useParams();
@@ -56,21 +63,29 @@ export default function ExamDetailPage() {
     const handleSubmit = async () => {
         try {
             await subsApi.createSubmission(id, { respostas: answers });
-            setSuccess('Submissão enviada com sucesso!');
+            setSuccess('Envio realizado com sucesso!');
             setError('');
             loadExam();
-        } catch (err) { setError(err.response?.data?.message || 'Erro ao enviar submissão.'); }
+        } catch (err) { setError(err.response?.data?.message || 'Erro ao enviar respostas.'); }
     };
 
     const handleCorrect = async (subId) => {
         try {
             await subsApi.correctSubmission(subId);
-            setSuccess('Submissão corrigida!');
+            setSuccess('Envio corrigido!');
             loadExam();
         } catch (err) { setError(err.response?.data?.message || 'Erro ao corrigir.'); }
     };
 
-    if (loading) return <div className="text-center py-20 text-slate-400">Carregando...</div>;
+    if (loading) return (
+        <div className="flex items-center justify-center py-20 gap-3 text-slate-400">
+            <svg className="animate-spin h-5 w-5" viewBox="0 0 24 24" fill="none">
+                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z" />
+            </svg>
+            Carregando...
+        </div>
+    );
     if (!exam) return <div className="text-center py-20 text-red-400">{error || 'Prova não encontrada.'}</div>;
 
     const alreadySubmitted = !isProfessor && submissions.length > 0;
@@ -83,7 +98,9 @@ export default function ExamDetailPage() {
             <div className="bg-slate-800/50 rounded-xl border border-slate-700/50 p-6 mb-6">
                 <div className="flex justify-between items-start mb-4">
                     <h1 className="text-2xl font-bold text-white">{exam.titulo}</h1>
-                    <span className="text-xs px-2 py-1 rounded-full border bg-blue-500/10 text-blue-400 border-blue-500/20">{exam.status}</span>
+                    <span className={`text-xs px-2 py-1 rounded-full border ${STATUS_COLORS[exam.status]}`}>
+                        {label(STATUS_LABEL, exam.status)}
+                    </span>
                 </div>
                 <p className="text-slate-400 mb-4">{exam.descricao || 'Sem descrição'}</p>
 
@@ -109,13 +126,15 @@ export default function ExamDetailPage() {
                 )}
             </div>
 
-            {/* Questions */}
+            {/* Questões */}
             <h2 className="text-lg font-semibold text-white mb-4">Questões ({exam.questions?.length || 0})</h2>
             <div className="space-y-4 mb-8">
                 {exam.questions?.sort((a, b) => a.ordem - b.ordem).map(q => (
                     <div key={q.id} className="bg-slate-800/30 rounded-lg border border-slate-700/30 p-4">
-                        <p className="text-white font-medium mb-2">{q.ordem}. {q.enunciado}</p>
-                        <p className="text-xs text-slate-500 mb-2">{q.tipo} — {q.pontuacao} pts</p>
+                        <p className="text-white font-medium mb-1">{q.ordem}. {q.enunciado}</p>
+                        <p className="text-xs text-slate-500 mb-3">
+                            {label(TIPO_QUESTAO_LABEL, q.tipo)} — {q.pontuacao} {q.pontuacao === 1 ? 'ponto' : 'pontos'}
+                        </p>
                         <div className="space-y-1">
                             {q.alternativas?.map((alt, i) => (
                                 <label key={i} className="flex items-center gap-2 text-sm text-slate-300 cursor-pointer hover:text-white transition">
@@ -130,13 +149,13 @@ export default function ExamDetailPage() {
                         </div>
                         {isProfessor && (
                             <button onClick={() => navigate(`/exams/${id}/questions/${q.id}/issues`)}
-                                className="mt-2 text-xs text-yellow-400 hover:text-yellow-300">Ver Issues</button>
+                                className="mt-2 text-xs text-yellow-400 hover:text-yellow-300">⚠ Ver Alertas</button>
                         )}
                     </div>
                 ))}
             </div>
 
-            {/* Aluno submit */}
+            {/* Aluno: enviar respostas */}
             {!isProfessor && exam.status === 'PUBLICADA' && !alreadySubmitted && (
                 <button onClick={handleSubmit}
                     className="w-full py-3 rounded-lg bg-gradient-to-r from-blue-600 to-purple-600 text-white font-semibold hover:from-blue-500 hover:to-purple-500 transition">
@@ -145,20 +164,27 @@ export default function ExamDetailPage() {
             )}
             {alreadySubmitted && (
                 <div className="p-4 rounded-lg bg-green-500/10 border border-green-500/20 text-green-400">
-                    Você já enviou sua submissão.{' '}
+                    Você já enviou suas respostas.{' '}
                     <button onClick={() => navigate(`/submissions/${submissions[0].id}/result`)} className="underline">Ver resultado</button>
                 </div>
             )}
 
-            {/* Professor submissions list */}
+            {/* Professor: lista de envios */}
             {isProfessor && submissions.length > 0 && (
                 <div className="mt-8">
-                    <h2 className="text-lg font-semibold text-white mb-4">Submissões ({submissions.length})</h2>
+                    <h2 className="text-lg font-semibold text-white mb-4">Envios ({submissions.length})</h2>
                     <div className="space-y-2">
-                        {submissions.map(sub => (
+                        {submissions.map((sub, idx) => (
                             <div key={sub.id} className="flex items-center justify-between p-3 bg-slate-800/30 rounded-lg border border-slate-700/30">
                                 <div className="text-sm text-slate-300">
-                                    Aluno: {sub.alunoId} — {sub.corrigida ? `Nota: ${sub.nota}` : 'Não corrigida'}
+                                    <span className="font-medium text-white">
+                                        {sub.alunoNome || sub.alunoEmail || `Aluno #${idx + 1}`}
+                                    </span>
+                                    {' — '}
+                                    {sub.corrigida
+                                        ? <span className="text-green-400">Nota: {sub.nota}</span>
+                                        : <span className="text-yellow-400">Aguardando correção</span>
+                                    }
                                 </div>
                                 {!sub.corrigida && (
                                     <button onClick={() => handleCorrect(sub.id)}

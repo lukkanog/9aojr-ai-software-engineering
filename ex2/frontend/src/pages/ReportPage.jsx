@@ -10,7 +10,7 @@ export default function ReportPage() {
     const navigate = useNavigate();
 
     useEffect(() => {
-        subsApi.getReport(examId).then(res => setReport(res.data)).catch(err => setError(err.response?.data?.message || 'Erro.'));
+        subsApi.getReport(examId).then(res => setReport(res.data)).catch(err => setError(err.response?.data?.message || 'Erro ao carregar relatório.'));
         subsApi.getStatistics(examId).then(res => setStats(res.data)).catch(() => { });
     }, [examId]);
 
@@ -25,7 +25,7 @@ export default function ReportPage() {
                     <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                         <div className="text-center p-4 bg-blue-500/10 rounded-lg border border-blue-500/20">
                             <div className="text-2xl font-bold text-blue-400">{report.mediaNotas}</div>
-                            <div className="text-xs text-slate-400">Média</div>
+                            <div className="text-xs text-slate-400">Média das Notas</div>
                         </div>
                         <div className="text-center p-4 bg-green-500/10 rounded-lg border border-green-500/20">
                             <div className="text-2xl font-bold text-green-400">{report.maiorNota}</div>
@@ -37,7 +37,7 @@ export default function ReportPage() {
                         </div>
                         <div className="text-center p-4 bg-purple-500/10 rounded-lg border border-purple-500/20">
                             <div className="text-2xl font-bold text-purple-400">{report.totalSubmissoes}</div>
-                            <div className="text-xs text-slate-400">Submissões</div>
+                            <div className="text-xs text-slate-400">Total de Envios</div>
                         </div>
                     </div>
                 </div>
@@ -45,29 +45,38 @@ export default function ReportPage() {
 
             {stats && (
                 <div className="bg-slate-800/50 rounded-xl border border-slate-700/50 p-6">
-                    <h2 className="text-xl font-bold text-white mb-4">Estatísticas</h2>
-                    <h3 className="text-sm font-semibold text-slate-300 mb-2">Acerto por Questão</h3>
-                    <div className="space-y-2 mb-6">
-                        {Object.entries(stats.percentualAcertoPorQuestao || {}).map(([qId, pct]) => (
+                    <h2 className="text-xl font-bold text-white mb-6">Estatísticas</h2>
+
+                    <h3 className="text-sm font-semibold text-slate-300 mb-3">Taxa de Acerto por Questão</h3>
+                    <div className="space-y-3 mb-8">
+                        {Object.entries(stats.percentualAcertoPorQuestao || {}).map(([qId, pct], idx) => (
                             <div key={qId} className="flex items-center gap-3">
-                                <span className="text-xs text-slate-400 w-24 truncate">{qId.substring(0, 8)}...</span>
+                                <span className="text-xs text-slate-400 w-20 flex-shrink-0">Questão {idx + 1}</span>
                                 <div className="flex-1 h-4 bg-slate-700 rounded-full overflow-hidden">
-                                    <div className="h-full bg-gradient-to-r from-blue-500 to-purple-500 rounded-full transition-all" style={{ width: `${pct}%` }} />
+                                    <div
+                                        className={`h-full rounded-full transition-all ${pct >= 70 ? 'bg-gradient-to-r from-green-500 to-emerald-400' : pct >= 40 ? 'bg-gradient-to-r from-yellow-500 to-orange-400' : 'bg-gradient-to-r from-red-600 to-red-400'}`}
+                                        style={{ width: `${pct}%` }}
+                                    />
                                 </div>
-                                <span className="text-xs text-slate-300 w-12 text-right">{pct}%</span>
+                                <span className="text-xs text-slate-300 w-12 text-right flex-shrink-0">{pct}%</span>
                             </div>
                         ))}
                     </div>
-                    <h3 className="text-sm font-semibold text-slate-300 mb-2">Distribuição de Notas</h3>
+
+                    <h3 className="text-sm font-semibold text-slate-300 mb-3">Distribuição de Notas</h3>
                     <div className="grid grid-cols-5 gap-2">
                         {Object.entries(stats.distribuicaoNotas || {}).map(([faixa, count]) => (
-                            <div key={faixa} className="text-center p-2 bg-slate-700/50 rounded-lg">
-                                <div className="text-sm font-bold text-white">{count}</div>
+                            <div key={faixa} className="text-center p-3 bg-slate-700/50 rounded-lg">
+                                <div className="text-lg font-bold text-white">{count}</div>
                                 <div className="text-xs text-slate-400">{faixa}</div>
                             </div>
                         ))}
                     </div>
                 </div>
+            )}
+
+            {!report && !error && (
+                <div className="text-center py-16 text-slate-500">Nenhum dado disponível. Os relatórios são gerados após envios corrigidos.</div>
             )}
         </div>
     );

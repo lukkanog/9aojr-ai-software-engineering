@@ -1,7 +1,7 @@
 spring:
   data:
     mongodb:
-      uri: mongodb://localhost:27017/examcorrection
+      uri: ${SPRING_DATA_MONGODB_URI:mongodb://localhost:27017/examcorrection}
 
   jackson:
     default-property-inclusion: non_null

@@ -1,5 +1,6 @@
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
+import { ROLE_LABEL, label } from '../utils/labels';
 
 export default function Navbar() {
     const { user, logoutUser, isAuthenticated } = useAuth();
@@ -20,7 +21,10 @@ export default function Navbar() {
                 </Link>
                 <div className="flex items-center gap-4">
                     <span className="text-sm text-slate-300">
-                        {user?.nome} <span className="text-xs px-2 py-0.5 rounded-full bg-blue-600/30 text-blue-300">{user?.role}</span>
+                        {user?.nome}{' '}
+                        <span className="text-xs px-2 py-0.5 rounded-full bg-blue-600/30 text-blue-300">
+                            {label(ROLE_LABEL, user?.role)}
+                        </span>
                     </span>
                     <button onClick={handleLogout} className="text-sm px-3 py-1.5 rounded-lg bg-red-500/10 text-red-400 hover:bg-red-500/20 transition">
                         Sair

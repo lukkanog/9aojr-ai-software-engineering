@@ -7,8 +7,10 @@ public record SubmissionResponse(
         String id,
         String examId,
         String alunoId,
+        String alunoNome,
         Map<String, String> respostas,
         Double nota,
         boolean corrigida,
         Instant dataEnvio) {
 }
+

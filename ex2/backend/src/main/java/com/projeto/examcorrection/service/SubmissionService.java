@@ -7,6 +7,7 @@ import com.projeto.examcorrection.error.BusinessRuleException;
 import com.projeto.examcorrection.error.ConflictException;
 import com.projeto.examcorrection.error.ResourceNotFoundException;
 import com.projeto.examcorrection.repository.SubmissionRepository;
+import com.projeto.examcorrection.repository.UserRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.Instant;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -24,10 +26,14 @@ public class SubmissionService {
 
     private final SubmissionRepository submissionRepository;
     private final ExamService examService;
+    private final UserRepository userRepository;
 
-    public SubmissionService(SubmissionRepository submissionRepository, ExamService examService) {
+    public SubmissionService(SubmissionRepository submissionRepository,
+            ExamService examService,
+            UserRepository userRepository) {
         this.submissionRepository = submissionRepository;
         this.examService = examService;
+        this.userRepository = userRepository;
     }
 
     public List<SubmissionResponse> findByExamId(String examId, String userId, Role role) {
@@ -43,13 +49,20 @@ public class SubmissionService {
         } else {
             subs = submissionRepository.findByExamId(examId);
         }
-        return subs.stream().map(this::toResponse).toList();
+
+        // Resolve nomes em batch para evitar N+1 queries
+        Set<String> alunoIds = subs.stream().map(Submission::getAlunoId).collect(Collectors.toSet());
+        Map<String, String> nomesPorId = userRepository.findAllById(alunoIds).stream()
+                .collect(Collectors.toMap(User::getId, u -> u.getNome() != null ? u.getNome() : u.getEmail()));
+
+        return subs.stream().map(s -> toResponse(s, nomesPorId.get(s.getAlunoId()))).toList();
     }
 
     public SubmissionResponse findResponseById(String id, String userId, Role role) {
         Submission sub = findById(id);
         checkAccess(sub, userId, role);
-        return toResponse(sub);
+        String alunoNome = resolveNome(sub.getAlunoId());
+        return toResponse(sub, alunoNome);
     }
 
     public Submission findById(String id) {
@@ -101,7 +114,7 @@ public class SubmissionService {
 
         sub = submissionRepository.save(sub);
         log.info("Submission created: id={}, exam={}, aluno={}", sub.getId(), examId, alunoId);
-        return toResponse(sub);
+        return toResponse(sub, resolveNome(alunoId));
     }
 
     private void checkAccess(Submission sub, String userId, Role role) {
@@ -117,8 +130,24 @@ public class SubmissionService {
         }
     }
 
-    private SubmissionResponse toResponse(Submission sub) {
-        return new SubmissionResponse(sub.getId(), sub.getExamId(), sub.getAlunoId(), sub.getRespostas(), sub.getNota(),
-                sub.isCorrigida(), sub.getDataEnvio());
+    /**
+     * Resolve o nome do aluno pelo ID, com fallback para o email ou o próprio ID.
+     */
+    private String resolveNome(String alunoId) {
+        return userRepository.findById(alunoId)
+                .map(u -> u.getNome() != null && !u.getNome().isBlank() ? u.getNome() : u.getEmail())
+                .orElse(alunoId);
+    }
+
+    private SubmissionResponse toResponse(Submission sub, String alunoNome) {
+        return new SubmissionResponse(
+                sub.getId(),
+                sub.getExamId(),
+                sub.getAlunoId(),
+                alunoNome,
+                sub.getRespostas(),
+                sub.getNota(),
+                sub.isCorrigida(),
+                sub.getDataEnvio());
     }
 }
