@@ -1,0 +1,29 @@
+spring:
+  data:
+    mongodb:
+      uri: ${SPRING_DATA_MONGODB_URI:mongodb://localhost:27017/examcorrection}
+
+  jackson:
+    default-property-inclusion: non_null
+    serialization:
+      write-dates-as-timestamps: false
+
+app:
+  jwt:
+    secret: T3h1cUZZVGdJMk1CZkRwSGtZeGRKdVJ3cUxNY2RUbFhYZkNxWW1kS2pNUT0=
+    expiration-ms: 86400000
+
+  correction:
+    min-submissions-for-issue: 20
+    threshold-low-accuracy: 30.0
+    threshold-high-accuracy: 95.0
+    threshold-high-blank: 40.0
+
+server:
+  port: 8080
+
+springdoc:
+  api-docs:
+    path: /api-docs
+  swagger-ui:
+    path: /swagger-ui.html
