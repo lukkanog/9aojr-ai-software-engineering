@@ -10,8 +10,17 @@ export default function ReportPage() {
     const navigate = useNavigate();
 
     useEffect(() => {
-        subsApi.getReport(examId).then(res => setReport(res.data)).catch(err => setError(err.response?.data?.message || 'Erro ao carregar relatório.'));
-        subsApi.getStatistics(examId).then(res => setStats(res.data)).catch(() => { });
+        let isMounted = true;
+        
+        subsApi.getReport(examId)
+            .then(res => { if (isMounted) setReport(res.data); })
+            .catch(err => { if (isMounted) setError(err.response?.data?.message || 'Erro ao carregar relatório.'); });
+            
+        subsApi.getStatistics(examId)
+            .then(res => { if (isMounted) setStats(res.data); })
+            .catch(() => { });
+            
+        return () => { isMounted = false; };
     }, [examId]);
 
     return (

@@ -132,90 +132,16 @@ public class ExamService {
         return toResponse(exam);
     }
 
-    // --- Questions as subdocument ---
+    // Removed Question as subdocument methods (extracted to QuestionService)
 
-    public List<Question> getQuestions(String examId, String userId, Role role) {
-        Exam exam = findById(examId);
-        checkReadAccess(exam, userId, role);
-        return exam.getQuestions();
-    }
-
-    public Question addQuestion(String examId, QuestionRequest request, String professorId) {
-        Exam exam = findById(examId);
-        checkOwnership(exam, professorId);
-        checkStatus(exam, ExamStatus.RASCUNHO, "Questões só podem ser adicionadas em provas RASCUNHO.");
-
-        if (request.tipo() == QuestionType.VERDADEIRO_FALSO && request.alternativas().size() != 2) {
-            throw new BusinessRuleException("INVALID_ALTERNATIVES",
-                    "Questões VERDADEIRO_FALSO devem ter exatamente 2 alternativas.");
-        }
-
-        Question question = new Question();
-        question.setId(UUID.randomUUID().toString());
-        question.setEnunciado(request.enunciado());
-        question.setTipo(request.tipo());
-        question.setAlternativas(request.alternativas());
-        question.setPontuacao(request.pontuacao());
-        question.setOrdem(request.ordem());
-
-        exam.getQuestions().add(question);
-        examRepository.save(exam);
-        log.info("Question added to exam {}: questionId={}", examId, question.getId());
-        return question;
-    }
-
-    public Question updateQuestion(String questionId, QuestionRequest request, String professorId) {
-        Exam exam = findExamByQuestionId(questionId);
-        checkOwnership(exam, professorId);
-        checkStatus(exam, ExamStatus.RASCUNHO, "Questões só podem ser editadas em provas RASCUNHO.");
-
-        if (request.tipo() == QuestionType.VERDADEIRO_FALSO && request.alternativas().size() != 2) {
-            throw new BusinessRuleException("INVALID_ALTERNATIVES",
-                    "Questões VERDADEIRO_FALSO devem ter exatamente 2 alternativas.");
-        }
-
-        Question question = exam.getQuestions().stream()
-                .filter(q -> q.getId().equals(questionId))
-                .findFirst()
-                .orElseThrow(() -> new ResourceNotFoundException("QUESTION_NOT_FOUND", "Questão não encontrada."));
-
-        question.setEnunciado(request.enunciado());
-        question.setTipo(request.tipo());
-        question.setAlternativas(request.alternativas());
-        question.setPontuacao(request.pontuacao());
-        question.setOrdem(request.ordem());
-
-        examRepository.save(exam);
-        log.info("Question updated: id={}", questionId);
-        return question;
-    }
-
-    public void deleteQuestion(String questionId, String professorId) {
-        Exam exam = findExamByQuestionId(questionId);
-        checkOwnership(exam, professorId);
-        checkStatus(exam, ExamStatus.RASCUNHO, "Questões só podem ser removidas em provas RASCUNHO.");
-
-        exam.getQuestions().removeIf(q -> q.getId().equals(questionId));
-        examRepository.save(exam);
-        log.info("Question deleted: id={}", questionId);
-    }
-
-    public Exam findExamByQuestionId(String questionId) {
-        return examRepository.findAll().stream()
-                .filter(e -> e.getQuestions().stream().anyMatch(q -> q.getId().equals(questionId)))
-                .findFirst()
-                .orElseThrow(() -> new ResourceNotFoundException("QUESTION_NOT_FOUND",
-                        "Questão não encontrada em nenhuma prova."));
-    }
-
-    private void checkOwnership(Exam exam, String professorId) {
+    public void checkOwnership(Exam exam, String professorId) {
         if (!exam.getProfessorId().equals(professorId)) {
             throw new BusinessRuleException("ACCESS_DENIED", "Você não tem permissão para acessar esta prova.",
                     HttpStatus.FORBIDDEN);
         }
     }
 
-    private void checkReadAccess(Exam exam, String userId, Role role) {
+    public void checkReadAccess(Exam exam, String userId, Role role) {
         if (role == Role.PROFESSOR && !exam.getProfessorId().equals(userId)) {
             throw new BusinessRuleException("ACCESS_DENIED", "Você não tem permissão para acessar esta prova.",
                     HttpStatus.FORBIDDEN);
@@ -225,7 +151,7 @@ public class ExamService {
         }
     }
 
-    private void checkStatus(Exam exam, ExamStatus expected, String message) {
+    public void checkStatus(Exam exam, ExamStatus expected, String message) {
         if (exam.getStatus() != expected) {
             throw new BusinessRuleException("INVALID_EXAM_STATUS", message);
         }

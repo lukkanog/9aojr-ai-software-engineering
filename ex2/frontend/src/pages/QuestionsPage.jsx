@@ -13,7 +13,13 @@ export default function QuestionsPage() {
     const [error, setError] = useState('');
     const navigate = useNavigate();
 
-    useEffect(() => { loadQuestions(); }, [examId]);
+    useEffect(() => {
+        let isMounted = true;
+        examsApi.getQuestions(examId)
+            .then(res => { if (isMounted) setQuestions(res.data); })
+            .catch(err => { if (isMounted) setError(err.response?.data?.message || 'Erro.'); });
+        return () => { isMounted = false; };
+    }, [examId]);
 
     const loadQuestions = async () => {
         try {
