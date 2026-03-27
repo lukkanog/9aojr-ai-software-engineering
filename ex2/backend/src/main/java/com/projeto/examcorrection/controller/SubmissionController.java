@@ -25,15 +25,16 @@ public class SubmissionController {
     }
 
     @GetMapping("/exams/{examId}/submissions")
+    @PreAuthorize("hasRole('ALUNO') or (hasRole('PROFESSOR') and @securityExpressions.isExamOwner(authentication, #examId))")
     public ResponseEntity<List<SubmissionResponse>> findByExam(@PathVariable String examId, Principal principal) {
-        var user = userService.findById(principal.getName());
-        return ResponseEntity.ok(submissionService.findByExamId(examId, user.getId(), user.getRole()));
+        String role = ((org.springframework.security.core.Authentication) principal).getAuthorities().iterator().next().getAuthority();
+        return ResponseEntity.ok(submissionService.findByExamId(examId, principal.getName(), role));
     }
 
     @GetMapping("/submissions/{id}")
-    public ResponseEntity<SubmissionResponse> findById(@PathVariable String id, Principal principal) {
-        var user = userService.findById(principal.getName());
-        return ResponseEntity.ok(submissionService.findResponseById(id, user.getId(), user.getRole()));
+    @PreAuthorize("(hasRole('ALUNO') and @securityExpressions.isSubmissionOwner(authentication, #id)) or (hasRole('PROFESSOR'))")
+    public ResponseEntity<SubmissionResponse> findById(@PathVariable String id) {
+        return ResponseEntity.ok(submissionService.findResponseById(id));
     }
 
     @PostMapping("/exams/{examId}/submissions")

@@ -1,45 +1,53 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import * as examsApi from '../api/exams';
+import { useQuestions, useAddQuestion, useDeleteQuestion } from '../hooks/useExams';
 import { TIPO_QUESTAO_LABEL, label } from '../utils/labels';
 
 export default function QuestionsPage() {
     const { examId } = useParams();
-    const [questions, setQuestions] = useState([]);
+    const navigate = useNavigate();
+
     const [enunciado, setEnunciado] = useState('');
     const [tipo, setTipo] = useState('OBJETIVA');
     const [alternativas, setAlternativas] = useState(['', '']);
     const [pontuacao, setPontuacao] = useState(1);
-    const [error, setError] = useState('');
-    const navigate = useNavigate();
+    const [localError, setLocalError] = useState('');
 
-    useEffect(() => { loadQuestions(); }, [examId]);
-
-    const loadQuestions = async () => {
-        try {
-            const res = await examsApi.getQuestions(examId);
-            setQuestions(res.data);
-        } catch (err) { setError(err.response?.data?.message || 'Erro.'); }
-    };
+    const { data: questions = [], isLoading, isError, error: fetchError } = useQuestions(examId);
+    const addMutation = useAddQuestion();
+    const deleteMutation = useDeleteQuestion();
 
     const handleAdd = async (e) => {
         e.preventDefault();
-        setError('');
+        setLocalError('');
         try {
-            await examsApi.addQuestion(examId, {
-                enunciado, tipo, alternativas: alternativas.filter(a => a.trim()),
-                pontuacao, ordem: questions.length + 1
+            await addMutation.mutateAsync({
+                examId,
+                data: {
+                    enunciado, 
+                    tipo, 
+                    alternativas: alternativas.filter(a => a.trim()),
+                    pontuacao, 
+                    ordem: questions.length + 1
+                }
             });
-            setEnunciado(''); setAlternativas(['', '']); setPontuacao(1);
-            loadQuestions();
-        } catch (err) { setError(err.response?.data?.message || 'Erro ao adicionar.'); }
+            setEnunciado(''); 
+            setAlternativas(['', '']); 
+            setPontuacao(1);
+        } catch (err) { setLocalError(err.response?.data?.message || 'Erro ao adicionar.'); }
     };
 
     const handleDelete = async (qId) => {
-        if (!confirm('Deseja remover esta questão?')) return;
-        try { await examsApi.deleteQuestion(qId); loadQuestions(); }
-        catch (err) { setError(err.response?.data?.message || 'Erro.'); }
+        if (!window.confirm('Deseja remover esta questão?')) return;
+        setLocalError('');
+        try { 
+            await deleteMutation.mutateAsync({ id: qId, examId }); 
+        } catch (err) { setLocalError(err.response?.data?.message || 'Erro.'); }
     };
+
+    if (isLoading) return <div className="text-center py-20 text-slate-400">Carregando questões...</div>;
+
+    const currentError = localError || (isError ? (fetchError?.response?.data?.message || 'Erro ao carregar questões') : '');
 
     return (
         <div className="max-w-3xl mx-auto p-6">
@@ -47,14 +55,16 @@ export default function QuestionsPage() {
                 <h1 className="text-2xl font-bold text-white">Questões</h1>
                 <button onClick={() => navigate(`/exams/${examId}`)} className="text-sm text-slate-400 hover:text-white">← Voltar</button>
             </div>
-            {error && <div className="mb-4 p-3 rounded-lg bg-red-500/10 text-red-400 text-sm">{error}</div>}
+            
+            {currentError && <div className="mb-4 p-3 rounded-lg bg-red-500/10 text-red-400 text-sm">{currentError}</div>}
 
             {/* Questões existentes */}
             <div className="space-y-3 mb-8">
                 {questions.length === 0 && (
                     <p className="text-slate-500 text-sm text-center py-6">Nenhuma questão adicionada ainda.</p>
                 )}
-                {questions.sort((a, b) => a.ordem - b.ordem).map(q => (
+                {/* Clone the array before sorting to avoid mutating the React Query cache directly */}
+                {[...questions].sort((a, b) => a.ordem - b.ordem).map(q => (
                     <div key={q.id} className="p-4 bg-slate-800/30 rounded-lg border border-slate-700/30 flex justify-between items-start gap-4">
                         <div className="flex-1 min-w-0">
                             <p className="text-white font-medium">{q.ordem}. {q.enunciado}</p>
@@ -67,7 +77,10 @@ export default function QuestionsPage() {
                                 </p>
                             )}
                         </div>
-                        <button onClick={() => handleDelete(q.id)} className="text-red-400 text-xs hover:text-red-300 flex-shrink-0">Excluir</button>
+                        <button onClick={() => handleDelete(q.id)} disabled={deleteMutation.isPending}
+                            className="text-red-400 text-xs hover:text-red-300 flex-shrink-0 disabled:opacity-50">
+                            Excluir
+                        </button>
                     </div>
                 ))}
             </div>
@@ -111,9 +124,9 @@ export default function QuestionsPage() {
                     <button type="button" onClick={() => setAlternativas([...alternativas, ''])}
                         className="text-xs text-blue-400 hover:text-blue-300">+ Adicionar alternativa</button>
                 </div>
-                <button type="submit"
-                    className="px-6 py-2 rounded-lg bg-gradient-to-r from-blue-600 to-purple-600 text-white font-semibold hover:from-blue-500 hover:to-purple-500 transition">
-                    Adicionar Questão
+                <button type="submit" disabled={addMutation.isPending}
+                    className="px-6 py-2 rounded-lg bg-gradient-to-r from-blue-600 to-purple-600 text-white font-semibold hover:from-blue-500 hover:to-purple-500 transition disabled:opacity-50">
+                    {addMutation.isPending ? 'Adicionando...' : 'Adicionar Questão'}
                 </button>
             </form>
         </div>

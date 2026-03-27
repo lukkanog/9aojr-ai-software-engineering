@@ -1,26 +1,21 @@
-import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import * as subsApi from '../api/submissions';
+import { useCorrectionResult } from '../hooks/useSubmissions';
 
 export default function CorrectionResultPage() {
     const { submissionId } = useParams();
-    const [result, setResult] = useState(null);
-    const [error, setError] = useState('');
     const navigate = useNavigate();
 
-    useEffect(() => {
-        subsApi.getCorrectionResult(submissionId)
-            .then(res => setResult(res.data))
-            .catch(err => setError(err.response?.data?.message || 'Resultado não disponível ainda.'));
-    }, [submissionId]);
+    const { data: result, isLoading, isError, error } = useCorrectionResult(submissionId);
 
-    if (error) return (
+    if (isError) return (
         <div className="max-w-3xl mx-auto p-6">
-            <div className="p-4 rounded-lg bg-red-500/10 text-red-400">{error}</div>
+            <div className="p-4 rounded-lg bg-red-500/10 text-red-400">
+                {error?.response?.data?.message || 'Resultado não disponível ainda.'}
+            </div>
             <button onClick={() => navigate(-1)} className="mt-4 text-sm text-slate-400 hover:text-white">← Voltar</button>
         </div>
     );
-    if (!result) return (
+    if (isLoading || !result) return (
         <div className="flex items-center justify-center py-20 gap-3 text-slate-400">
             <svg className="animate-spin h-5 w-5" viewBox="0 0 24 24" fill="none">
                 <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />

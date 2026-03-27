@@ -113,9 +113,9 @@ public class ReportService {
                         if (cr == null)
                             return false;
                         return cr.getDetalhesPorQuestao().stream()
-                                .filter(d -> d.getQuestionId().equals(q.getId()))
+                                .filter(d -> d.questionId().equals(q.getId()))
                                 .findFirst()
-                                .map(QuestionDetail::isCorreta)
+                                .map(QuestionDetail::correta)
                                 .orElse(false);
                     }).count();
             double pct = Math.round((acertos * 100.0 / total) * 100.0) / 100.0;

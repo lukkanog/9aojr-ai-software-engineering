@@ -96,4 +96,8 @@ public class Exam {
     public void setDataCriacao(Instant dataCriacao) {
         this.dataCriacao = dataCriacao;
     }
+
+    public boolean isOwner(String userId) {
+        return this.professorId != null && this.professorId.equals(userId);
+    }
 }

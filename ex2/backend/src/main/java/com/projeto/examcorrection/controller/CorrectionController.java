@@ -22,15 +22,14 @@ public class CorrectionController {
     }
 
     @PostMapping("/{id}/correct")
-    @PreAuthorize("hasRole('PROFESSOR')")
-    public ResponseEntity<CorrectionResultResponse> correct(@PathVariable String id, Principal principal) {
-        var user = userService.findById(principal.getName());
-        return ResponseEntity.ok(correctionService.correct(id, user.getId(), user.getRole()));
+    @PreAuthorize("hasRole('PROFESSOR') and @securityExpressions.isProfessorOfSubmission(authentication, #id)")
+    public ResponseEntity<CorrectionResultResponse> correct(@PathVariable String id) {
+        return ResponseEntity.ok(correctionService.correct(id));
     }
 
     @GetMapping("/{id}/correction-result")
-    public ResponseEntity<CorrectionResultResponse> getResult(@PathVariable String id, Principal principal) {
-        var user = userService.findById(principal.getName());
-        return ResponseEntity.ok(correctionService.getResult(id, user.getId(), user.getRole()));
+    @PreAuthorize("(hasRole('ALUNO') and @securityExpressions.isSubmissionOwner(authentication, #id)) or (hasRole('PROFESSOR') and @securityExpressions.isProfessorOfSubmission(authentication, #id))")
+    public ResponseEntity<CorrectionResultResponse> getResult(@PathVariable String id) {
+        return ResponseEntity.ok(correctionService.getResult(id));
     }
 }

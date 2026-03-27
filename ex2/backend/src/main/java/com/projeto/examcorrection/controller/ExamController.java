@@ -33,6 +33,7 @@ public class ExamController {
     }
 
     @GetMapping("/{id}")
+    @PreAuthorize("hasRole('ALUNO') or (hasRole('PROFESSOR') and @securityExpressions.isExamOwner(authentication, #id))")
     public ResponseEntity<ExamResponse> findById(@PathVariable String id, Principal principal) {
         var user = userService.findById(principal.getName());
         return ResponseEntity.ok(examService.findResponseById(id, user.getId(), user.getRole()));
@@ -45,28 +46,27 @@ public class ExamController {
     }
 
     @PutMapping("/{id}")
-    @PreAuthorize("hasRole('PROFESSOR')")
-    public ResponseEntity<ExamResponse> update(@PathVariable String id, @Valid @RequestBody ExamRequest request,
-            Principal principal) {
-        return ResponseEntity.ok(examService.update(id, request, principal.getName()));
+    @PreAuthorize("hasRole('PROFESSOR') and @securityExpressions.isExamOwner(authentication, #id)")
+    public ResponseEntity<ExamResponse> update(@PathVariable String id, @Valid @RequestBody ExamRequest request) {
+        return ResponseEntity.ok(examService.update(id, request));
     }
 
     @DeleteMapping("/{id}")
-    @PreAuthorize("hasRole('PROFESSOR')")
-    public ResponseEntity<Void> delete(@PathVariable String id, Principal principal) {
-        examService.delete(id, principal.getName());
+    @PreAuthorize("hasRole('PROFESSOR') and @securityExpressions.isExamOwner(authentication, #id)")
+    public ResponseEntity<Void> delete(@PathVariable String id) {
+        examService.delete(id);
         return ResponseEntity.noContent().build();
     }
 
     @PostMapping("/{id}/publish")
-    @PreAuthorize("hasRole('PROFESSOR')")
-    public ResponseEntity<ExamResponse> publish(@PathVariable String id, Principal principal) {
-        return ResponseEntity.ok(examService.publish(id, principal.getName()));
+    @PreAuthorize("hasRole('PROFESSOR') and @securityExpressions.isExamOwner(authentication, #id)")
+    public ResponseEntity<ExamResponse> publish(@PathVariable String id) {
+        return ResponseEntity.ok(examService.publish(id));
     }
 
     @PostMapping("/{id}/close")
-    @PreAuthorize("hasRole('PROFESSOR')")
-    public ResponseEntity<ExamResponse> close(@PathVariable String id, Principal principal) {
-        return ResponseEntity.ok(examService.close(id, principal.getName()));
+    @PreAuthorize("hasRole('PROFESSOR') and @securityExpressions.isExamOwner(authentication, #id)")
+    public ResponseEntity<ExamResponse> close(@PathVariable String id) {
+        return ResponseEntity.ok(examService.close(id));
     }
 }

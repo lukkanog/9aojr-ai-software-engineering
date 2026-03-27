@@ -1,6 +1,6 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import * as subsApi from '../api/submissions';
+import { useIssues, useCreateIssue } from '../hooks/useSubmissions';
 import { SEVERIDADE_LABEL, GERADO_POR_LABEL, label } from '../utils/labels';
 
 const SEV_COLORS = {
@@ -11,30 +11,37 @@ const SEV_COLORS = {
 
 export default function IssuesPage() {
     const { examId, questionId } = useParams();
-    const [issues, setIssues] = useState([]);
+    const navigate = useNavigate();
+
     const [tipoProblema, setTipoProblema] = useState('');
     const [severidade, setSeveridade] = useState('MEDIA');
     const [descricao, setDescricao] = useState('');
-    const [error, setError] = useState('');
+    const [localError, setLocalError] = useState('');
     const [success, setSuccess] = useState('');
-    const navigate = useNavigate();
 
-    useEffect(() => { loadIssues(); }, [questionId]);
-
-    const loadIssues = () => {
-        subsApi.getIssues(questionId).then(res => setIssues(res.data)).catch(() => { });
-    };
+    const { data: issues = [], isLoading, isError, error } = useIssues(questionId);
+    const createMutation = useCreateIssue();
 
     const handleCreate = async (e) => {
         e.preventDefault();
-        setError(''); setSuccess('');
+        setLocalError(''); 
+        setSuccess('');
         try {
-            await subsApi.createIssue(questionId, { tipoProblema, severidade, descricao });
+            await createMutation.mutateAsync({
+                questionId, 
+                data: { tipoProblema, severidade, descricao }
+            });
             setSuccess('Alerta registrado com sucesso!');
-            setTipoProblema(''); setDescricao('');
-            loadIssues();
-        } catch (err) { setError(err.response?.data?.message || 'Erro ao registrar alerta.'); }
+            setTipoProblema(''); 
+            setDescricao('');
+        } catch (err) { 
+            setLocalError(err.response?.data?.message || 'Erro ao registrar alerta.'); 
+        }
     };
+
+    if (isLoading) return <div className="text-center py-20 text-slate-400">Carregando alertas...</div>;
+
+    const currentError = localError || (isError ? (error?.response?.data?.message || 'Erro ao carregar alertas') : '');
 
     return (
         <div className="max-w-3xl mx-auto p-6">
@@ -42,7 +49,7 @@ export default function IssuesPage() {
             <h1 className="text-2xl font-bold text-white mb-1">Alertas da Questão</h1>
             <p className="text-sm text-slate-500 mb-6">Problemas detectados automaticamente ou registrados manualmente.</p>
 
-            {error && <div className="mb-4 p-3 rounded-lg bg-red-500/10 text-red-400 text-sm">{error}</div>}
+            {currentError && <div className="mb-4 p-3 rounded-lg bg-red-500/10 text-red-400 text-sm">{currentError}</div>}
             {success && <div className="mb-4 p-3 rounded-lg bg-green-500/10 text-green-400 text-sm">{success}</div>}
 
             <div className="space-y-3 mb-8">
@@ -52,7 +59,7 @@ export default function IssuesPage() {
                     </div>
                 )}
                 {issues.map(issue => (
-                    <div key={issue.id} className={`p-4 rounded-lg border ${SEV_COLORS[issue.severidade]}`}>
+                    <div key={issue.id} className={`p-4 rounded-lg border ${SEV_COLORS[issue.severidade] || SEV_COLORS.BAIXA}`}>
                         <div className="flex justify-between items-start mb-1">
                             <span className="font-medium text-sm">{issue.tipoProblema}</span>
                             <div className="flex items-center gap-2 text-xs opacity-70">
@@ -87,9 +94,9 @@ export default function IssuesPage() {
                     <textarea id="desc" value={descricao} onChange={e => setDescricao(e.target.value)} required rows={3}
                         className="w-full px-4 py-2 rounded-lg bg-slate-700/50 border border-slate-600 text-white outline-none focus:ring-2 focus:ring-yellow-500" />
                 </div>
-                <button type="submit"
-                    className="px-6 py-2 rounded-lg bg-gradient-to-r from-yellow-600 to-orange-600 text-white font-semibold hover:from-yellow-500 hover:to-orange-500 transition">
-                    Registrar Alerta
+                <button type="submit" disabled={createMutation.isPending}
+                    className="px-6 py-2 rounded-lg bg-gradient-to-r from-yellow-600 to-orange-600 text-white font-semibold hover:from-yellow-500 hover:to-orange-500 transition disabled:opacity-50 disabled:cursor-not-allowed">
+                    {createMutation.isPending ? 'Registrando...' : 'Registrar Alerta'}
                 </button>
             </form>
         </div>

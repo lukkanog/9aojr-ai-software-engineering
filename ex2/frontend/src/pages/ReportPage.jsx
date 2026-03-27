@@ -1,23 +1,19 @@
-import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import * as subsApi from '../api/submissions';
+import { useReport, useStatistics } from '../hooks/useSubmissions';
 
 export default function ReportPage() {
     const { examId } = useParams();
-    const [report, setReport] = useState(null);
-    const [stats, setStats] = useState(null);
-    const [error, setError] = useState('');
     const navigate = useNavigate();
 
-    useEffect(() => {
-        subsApi.getReport(examId).then(res => setReport(res.data)).catch(err => setError(err.response?.data?.message || 'Erro ao carregar relatório.'));
-        subsApi.getStatistics(examId).then(res => setStats(res.data)).catch(() => { });
-    }, [examId]);
+    const { data: report, isLoading: isLoadingReport, isError, error } = useReport(examId);
+    const { data: stats, isLoading: isLoadingStats } = useStatistics(examId);
 
     return (
         <div className="max-w-4xl mx-auto p-6">
             <button onClick={() => navigate(`/exams/${examId}`)} className="text-sm text-slate-400 hover:text-white mb-6">← Voltar</button>
-            {error && <div className="mb-4 p-3 rounded-lg bg-red-500/10 text-red-400 text-sm">{error}</div>}
+            {isError && <div className="mb-4 p-3 rounded-lg bg-red-500/10 text-red-400 text-sm">{error?.response?.data?.message || 'Erro ao carregar relatório.'}</div>}
+
+            {isLoadingReport && <div className="text-center py-20 text-slate-400">Carregando relatório...</div>}
 
             {report && (
                 <div className="bg-slate-800/50 rounded-xl border border-slate-700/50 p-6 mb-6">
@@ -43,7 +39,7 @@ export default function ReportPage() {
                 </div>
             )}
 
-            {stats && (
+            {!isLoadingStats && stats && (
                 <div className="bg-slate-800/50 rounded-xl border border-slate-700/50 p-6">
                     <h2 className="text-xl font-bold text-white mb-6">Estatísticas</h2>
 
@@ -75,7 +71,7 @@ export default function ReportPage() {
                 </div>
             )}
 
-            {!report && !error && (
+            {!report && !isLoadingReport && !isError && (
                 <div className="text-center py-16 text-slate-500">Nenhum dado disponível. Os relatórios são gerados após envios corrigidos.</div>
             )}
         </div>

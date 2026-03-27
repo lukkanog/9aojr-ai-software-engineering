@@ -1,0 +1,9 @@
+Code Smells
+Prompt:
+"Analise o projeto full stack com Java 21, Spring Boot 3.4.1, Spring Security com JWT, Spring Data MongoDB, MongoDB 7, React 18, Vite, TailwindCSS 4, React Router e Axios. Identifique Code Smells no backend e frontend, como métodos muito longos, classes ou componentes com responsabilidades múltiplas, duplicação de lógica, acoplamento excessivo, validações repetidas, Services inchados, uso inadequado de useEffect, chamadas Axios duplicadas e componentes React muito grandes. Para cada ocorrência, informe onde está, por que é um problema, qual o impacto técnico e qual refatoração é recomendada."
+Violação de Padrões
+Prompt:
+"Analise a arquitetura do projeto e identifique violações de padrões e boas práticas no stack Java 21 + Spring Boot 3.4.1 + Spring Security JWT + Spring Data MongoDB + React 18 + Vite + TailwindCSS 4 + React Router + Axios. Verifique problemas como lógica de banco dentro de Controllers, regras de negócio fora da camada correta, uso inadequado do Spring Security, acesso direto à API no componente de interface, proteção de rotas inconsistente, ausência de separação entre UI e serviços e acoplamento excessivo entre frontend e backend. Para cada violação, explique o risco técnico, o padrão afetado e proponha uma organização melhor."
+Obsolescência
+Prompt:
+"Analise o projeto em busca de trechos obsoletos, verbosos ou desatualizados para o stack Java 21, Spring Boot 3.4.1, Spring Security JWT, Spring Data MongoDB, MongoDB 7, React 18, Vite, TailwindCSS 4, React Router e Axios. Procure casos como loops manuais onde caberia Java Streams, classes simples que poderiam ser records, boilerplate excessivo, configuração antiga de segurança, mapeamentos repetitivos, padrões antigos de React, uso excessivo de useEffect, chamadas HTTP duplicadas e estrutura pouco moderna de rotas e componentes. Para cada caso, explique a melhoria possível, o ganho esperado e a refatoração sugerida."
