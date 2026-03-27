@@ -25,32 +25,30 @@ public class QuestionController {
     }
 
     @GetMapping("/exams/{examId}/questions")
-    public ResponseEntity<List<Question>> getQuestions(@PathVariable String examId, Principal principal) {
-        var user = userService.findById(principal.getName());
-        return ResponseEntity.ok(questionService.getQuestions(examId, user.getId(), user.getRole()));
+    @PreAuthorize("hasRole('ALUNO') or (hasRole('PROFESSOR') and @securityExpressions.isExamOwner(authentication, #examId))")
+    public ResponseEntity<List<Question>> getQuestions(@PathVariable String examId) {
+        return ResponseEntity.ok(questionService.getQuestions(examId));
     }
 
     @PostMapping("/exams/{examId}/questions")
-    @PreAuthorize("hasRole('PROFESSOR')")
+    @PreAuthorize("hasRole('PROFESSOR') and @securityExpressions.isExamOwner(authentication, #examId)")
     public ResponseEntity<Question> addQuestion(@PathVariable String examId,
-            @Valid @RequestBody QuestionRequest request,
-            Principal principal) {
+            @Valid @RequestBody QuestionRequest request) {
         return ResponseEntity.status(HttpStatus.CREATED)
-                .body(questionService.addQuestion(examId, request, principal.getName()));
+                .body(questionService.addQuestion(examId, request));
     }
 
     @PutMapping("/questions/{id}")
-    @PreAuthorize("hasRole('PROFESSOR')")
+    @PreAuthorize("hasRole('PROFESSOR') and @securityExpressions.isExamOwnerByQuestion(authentication, #id)")
     public ResponseEntity<Question> updateQuestion(@PathVariable String id,
-            @Valid @RequestBody QuestionRequest request,
-            Principal principal) {
-        return ResponseEntity.ok(questionService.updateQuestion(id, request, principal.getName()));
+            @Valid @RequestBody QuestionRequest request) {
+        return ResponseEntity.ok(questionService.updateQuestion(id, request));
     }
 
     @DeleteMapping("/questions/{id}")
-    @PreAuthorize("hasRole('PROFESSOR')")
-    public ResponseEntity<Void> deleteQuestion(@PathVariable String id, Principal principal) {
-        questionService.deleteQuestion(id, principal.getName());
+    @PreAuthorize("hasRole('PROFESSOR') and @securityExpressions.isExamOwnerByQuestion(authentication, #id)")
+    public ResponseEntity<Void> deleteQuestion(@PathVariable String id) {
+        questionService.deleteQuestion(id);
         return ResponseEntity.noContent().build();
     }
 }

@@ -79,4 +79,8 @@ public class Submission {
     public void setDataEnvio(Instant dataEnvio) {
         this.dataEnvio = dataEnvio;
     }
+
+    public boolean isOwner(String userId) {
+        return this.alunoId != null && this.alunoId.equals(userId);
+    }
 }

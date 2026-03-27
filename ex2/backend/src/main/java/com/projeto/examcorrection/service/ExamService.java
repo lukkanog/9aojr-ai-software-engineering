@@ -70,9 +70,8 @@ public class ExamService {
         return toResponse(exam);
     }
 
-    public ExamResponse update(String id, ExamRequest request, String professorId) {
+    public ExamResponse update(String id, ExamRequest request) {
         Exam exam = findById(id);
-        checkOwnership(exam, professorId);
         checkStatus(exam, ExamStatus.RASCUNHO, "Apenas provas em RASCUNHO podem ser editadas.");
 
         exam.setTitulo(request.titulo());
@@ -85,18 +84,16 @@ public class ExamService {
         return toResponse(exam);
     }
 
-    public void delete(String id, String professorId) {
+    public void delete(String id) {
         Exam exam = findById(id);
-        checkOwnership(exam, professorId);
         checkStatus(exam, ExamStatus.RASCUNHO, "Apenas provas em RASCUNHO podem ser deletadas.");
 
         examRepository.delete(exam);
         log.info("Exam deleted: id={}", id);
     }
 
-    public ExamResponse publish(String id, String professorId) {
+    public ExamResponse publish(String id) {
         Exam exam = findById(id);
-        checkOwnership(exam, professorId);
         checkStatus(exam, ExamStatus.RASCUNHO, "Apenas provas em RASCUNHO podem ser publicadas.");
 
         if (exam.getQuestions() == null || exam.getQuestions().isEmpty()) {
@@ -121,9 +118,8 @@ public class ExamService {
         return toResponse(exam);
     }
 
-    public ExamResponse close(String id, String professorId) {
+    public ExamResponse close(String id) {
         Exam exam = findById(id);
-        checkOwnership(exam, professorId);
         checkStatus(exam, ExamStatus.PUBLICADA, "Apenas provas PUBLICADAS podem ser encerradas.");
 
         exam.setStatus(ExamStatus.ENCERRADA);
@@ -133,13 +129,6 @@ public class ExamService {
     }
 
     // Removed Question as subdocument methods (extracted to QuestionService)
-
-    public void checkOwnership(Exam exam, String professorId) {
-        if (!exam.getProfessorId().equals(professorId)) {
-            throw new BusinessRuleException("ACCESS_DENIED", "Você não tem permissão para acessar esta prova.",
-                    HttpStatus.FORBIDDEN);
-        }
-    }
 
     public void checkReadAccess(Exam exam, String userId, Role role) {
         if (role == Role.PROFESSOR && !exam.getProfessorId().equals(userId)) {

@@ -29,15 +29,13 @@ public class QuestionService {
         this.examRepository = examRepository;
     }
 
-    public List<Question> getQuestions(String examId, String userId, Role role) {
+    public List<Question> getQuestions(String examId) {
         Exam exam = examService.findById(examId);
-        examService.checkReadAccess(exam, userId, role);
         return exam.getQuestions();
     }
 
-    public Question addQuestion(String examId, QuestionRequest request, String professorId) {
+    public Question addQuestion(String examId, QuestionRequest request) {
         Exam exam = examService.findById(examId);
-        examService.checkOwnership(exam, professorId);
         examService.checkStatus(exam, ExamStatus.RASCUNHO, "Questões só podem ser adicionadas em provas RASCUNHO.");
 
         validateQuestionRequest(request);
@@ -56,9 +54,8 @@ public class QuestionService {
         return question;
     }
 
-    public Question updateQuestion(String questionId, QuestionRequest request, String professorId) {
+    public Question updateQuestion(String questionId, QuestionRequest request) {
         Exam exam = findExamByQuestionId(questionId);
-        examService.checkOwnership(exam, professorId);
         examService.checkStatus(exam, ExamStatus.RASCUNHO, "Questões só podem ser editadas em provas RASCUNHO.");
 
         validateQuestionRequest(request);
@@ -79,9 +76,8 @@ public class QuestionService {
         return question;
     }
 
-    public void deleteQuestion(String questionId, String professorId) {
+    public void deleteQuestion(String questionId) {
         Exam exam = findExamByQuestionId(questionId);
-        examService.checkOwnership(exam, professorId);
         examService.checkStatus(exam, ExamStatus.RASCUNHO, "Questões só podem ser removidas em provas RASCUNHO.");
 
         exam.getQuestions().removeIf(q -> q.getId().equals(questionId));

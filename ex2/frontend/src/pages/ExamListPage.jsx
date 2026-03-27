@@ -1,41 +1,27 @@
-import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
-import * as examsApi from '../api/exams';
 import { STATUS_LABEL, label } from '../utils/labels';
-
-const STATUS_COLORS = {
-    RASCUNHO: 'bg-yellow-500/10 text-yellow-400 border-yellow-500/20',
-    PUBLICADA: 'bg-green-500/10 text-green-400 border-green-500/20',
-    ENCERRADA: 'bg-slate-500/10 text-slate-400 border-slate-500/20',
-};
+import { STATUS_COLORS } from '../utils/constants';
+import { useExams, useDeleteExam } from '../hooks/useExams';
 
 export default function ExamListPage() {
-    const [exams, setExams] = useState([]);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState('');
     const { user } = useAuth();
     const navigate = useNavigate();
     const isProfessor = user?.role === 'PROFESSOR';
 
-    useEffect(() => {
-        examsApi.getExams()
-            .then(res => setExams(res.data))
-            .catch(err => setError(err.response?.data?.message || 'Erro ao carregar provas.'))
-            .finally(() => setLoading(false));
-    }, []);
+    const { data: exams, isLoading, isError, error } = useExams();
+    const { mutateAsync: deleteExamAsync } = useDeleteExam();
 
     const handleDelete = async (id) => {
-        if (!confirm('Tem certeza que deseja excluir esta prova?')) return;
+        if (!window.confirm('Tem certeza que deseja excluir esta prova?')) return;
         try {
-            await examsApi.deleteExam(id);
-            setExams(exams.filter(e => e.id !== id));
+            await deleteExamAsync(id);
         } catch (err) {
-            setError(err.response?.data?.message || 'Erro ao excluir.');
+            alert(err.response?.data?.message || 'Erro ao excluir.');
         }
     };
 
-    if (loading) return (
+    if (isLoading) return (
         <div className="flex items-center justify-center py-20 gap-3 text-slate-400">
             <svg className="animate-spin h-5 w-5" viewBox="0 0 24 24" fill="none">
                 <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
@@ -56,8 +42,9 @@ export default function ExamListPage() {
                     </button>
                 )}
             </div>
-            {error && <div className="mb-4 p-3 rounded-lg bg-red-500/10 text-red-400 text-sm">{error}</div>}
-            {exams.length === 0 ? (
+            {isError && <div className="mb-4 p-3 rounded-lg bg-red-500/10 text-red-400 text-sm">{error?.response?.data?.message || 'Erro ao carregar provas.'}</div>}
+            
+            {!exams || exams.length === 0 ? (
                 <div className="text-center py-16 text-slate-500">Nenhuma prova encontrada.</div>
             ) : (
                 <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
@@ -66,7 +53,7 @@ export default function ExamListPage() {
                             className="p-5 rounded-xl bg-slate-800/50 border border-slate-700/50 hover:border-blue-500/30 hover:bg-slate-800/80 transition group">
                             <div className="flex items-start justify-between mb-3">
                                 <h2 className="text-lg font-semibold text-white group-hover:text-blue-400 transition">{exam.titulo}</h2>
-                                <span className={`text-xs px-2 py-1 rounded-full border ${STATUS_COLORS[exam.status]}`}>
+                                <span className={`text-xs px-2 py-1 rounded-full border ${STATUS_COLORS[exam.status] || 'bg-slate-500 text-white'}`}>
                                     {label(STATUS_LABEL, exam.status)}
                                 </span>
                             </div>

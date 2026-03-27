@@ -47,14 +47,11 @@ public class CorrectionService {
         this.correctionCalculator = correctionCalculator;
     }
 
-    public CorrectionResultResponse correct(String submissionId, String userId, Role role) {
+    public CorrectionResultResponse correct(String submissionId) {
         Submission sub = submissionRepository.findById(submissionId)
                 .orElseThrow(() -> new ResourceNotFoundException("SUBMISSION_NOT_FOUND", "Submissão não encontrada."));
 
         Exam exam = examService.findById(sub.getExamId());
-        if (role == Role.PROFESSOR && !exam.getProfessorId().equals(userId)) {
-            throw new BusinessRuleException("ACCESS_DENIED", "Acesso negado.", HttpStatus.FORBIDDEN);
-        }
 
         if (correctionResultRepository.existsBySubmissionId(submissionId)) {
             throw new BusinessRuleException("ALREADY_CORRECTED", "Esta submissão já foi corrigida.");
@@ -82,19 +79,9 @@ public class CorrectionService {
         return toResponse(result);
     }
 
-    public CorrectionResultResponse getResult(String submissionId, String userId, Role role) {
+    public CorrectionResultResponse getResult(String submissionId) {
         Submission sub = submissionRepository.findById(submissionId)
                 .orElseThrow(() -> new ResourceNotFoundException("SUBMISSION_NOT_FOUND", "Submissão não encontrada."));
-
-        if (role == Role.ALUNO && !sub.getAlunoId().equals(userId)) {
-            throw new BusinessRuleException("ACCESS_DENIED", "Acesso negado.", HttpStatus.FORBIDDEN);
-        }
-        if (role == Role.PROFESSOR) {
-            Exam exam = examService.findById(sub.getExamId());
-            if (!exam.getProfessorId().equals(userId)) {
-                throw new BusinessRuleException("ACCESS_DENIED", "Acesso negado.", HttpStatus.FORBIDDEN);
-            }
-        }
 
         CorrectionResult result = correctionResultRepository.findBySubmissionId(submissionId)
                 .orElseThrow(() -> new ResourceNotFoundException("CORRECTION_NOT_FOUND",

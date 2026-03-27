@@ -14,10 +14,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
+import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.aggregation.Aggregation;
+import org.springframework.data.mongodb.core.query.Criteria;
 
 @Service
 public class SubmissionService {
@@ -27,40 +29,38 @@ public class SubmissionService {
     private final SubmissionRepository submissionRepository;
     private final ExamService examService;
     private final UserRepository userRepository;
+    private final MongoTemplate mongoTemplate;
 
     public SubmissionService(SubmissionRepository submissionRepository,
             ExamService examService,
-            UserRepository userRepository) {
+            UserRepository userRepository,
+            MongoTemplate mongoTemplate) {
         this.submissionRepository = submissionRepository;
         this.examService = examService;
         this.userRepository = userRepository;
+        this.mongoTemplate = mongoTemplate;
     }
 
-    public List<SubmissionResponse> findByExamId(String examId, String userId, Role role) {
-        Exam exam = examService.findById(examId);
-        if (role == Role.PROFESSOR && !exam.getProfessorId().equals(userId)) {
-            throw new BusinessRuleException("ACCESS_DENIED", "Acesso negado.", HttpStatus.FORBIDDEN);
+    public List<SubmissionResponse> findByExamId(String examId, String userId, String roleAuthority) {
+        Criteria criteria = Criteria.where("examId").is(examId);
+        if ("ROLE_ALUNO".equals(roleAuthority)) {
+            criteria.and("alunoId").is(userId);
         }
 
-        List<Submission> subs;
-        if (role == Role.ALUNO) {
-            subs = submissionRepository.findByExamIdAndAlunoId(examId, userId)
-                    .map(List::of).orElse(List.of());
-        } else {
-            subs = submissionRepository.findByExamId(examId);
-        }
+        Aggregation agg = Aggregation.newAggregation(
+                Aggregation.match(criteria),
+                Aggregation.lookup("users", "alunoId", "_id", "studentInfo"),
+                Aggregation.unwind("studentInfo", true),
+                Aggregation.project("id", "examId", "alunoId", "respostas", "nota", "corrigida", "dataEnvio")
+                        .andExpression("ifNull($studentInfo.nome, ifNull($studentInfo.email, 'UNKNOWN'))")
+                        .as("alunoNome")
+        );
 
-        // Resolve nomes em batch para evitar N+1 queries
-        Set<String> alunoIds = subs.stream().map(Submission::getAlunoId).collect(Collectors.toSet());
-        Map<String, String> nomesPorId = userRepository.findAllById(alunoIds).stream()
-                .collect(Collectors.toMap(User::getId, u -> u.getNome() != null ? u.getNome() : u.getEmail()));
-
-        return subs.stream().map(s -> toResponse(s, nomesPorId.get(s.getAlunoId()))).toList();
+        return mongoTemplate.aggregate(agg, "submissions", SubmissionResponse.class).getMappedResults();
     }
 
-    public SubmissionResponse findResponseById(String id, String userId, Role role) {
+    public SubmissionResponse findResponseById(String id) {
         Submission sub = findById(id);
-        checkAccess(sub, userId, role);
         String alunoNome = resolveNome(sub.getAlunoId());
         return toResponse(sub, alunoNome);
     }
@@ -117,18 +117,7 @@ public class SubmissionService {
         return toResponse(sub, resolveNome(alunoId));
     }
 
-    private void checkAccess(Submission sub, String userId, Role role) {
-        if (role == Role.ALUNO && !sub.getAlunoId().equals(userId)) {
-            throw new BusinessRuleException("ACCESS_DENIED", "Você só pode acessar suas próprias submissões.",
-                    HttpStatus.FORBIDDEN);
-        }
-        if (role == Role.PROFESSOR) {
-            Exam exam = examService.findById(sub.getExamId());
-            if (!exam.getProfessorId().equals(userId)) {
-                throw new BusinessRuleException("ACCESS_DENIED", "Acesso negado.", HttpStatus.FORBIDDEN);
-            }
-        }
-    }
+    // checkAccess removed, replaced by Method Security
 
     /**
      * Resolve o nome do aluno pelo ID, com fallback para o email ou o próprio ID.
